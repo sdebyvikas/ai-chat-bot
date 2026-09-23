@@ -14,10 +14,16 @@ function App() {
       text: message,
     };
 
+
     setChat((prev) => [...prev, userMessage]);
 
     setLoading(true);
 
+
+    console.log(userMessage, "userMessage");
+    console.log(message , "message");
+    return; // Add this line to prevent the function from continuing
+    
     const aiResponse = await sendMessage(message);
 
     setChat((prev) => [
