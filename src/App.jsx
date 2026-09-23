@@ -64,37 +64,50 @@ function App() {
   };
 
   return (
-    <div style={{ padding: 20 }}>
+   <div className="h-screen bg-gray-100 flex flex-col">
       <h1>Chat App</h1>
 
-      <div
-        style={{
-          height: "400px",
-          border: "1px solid #ccc",
-          padding: "10px",
-          overflowY: "auto",
-        }}
-      >
-        {chat.map((msg, index) => (
-          <div key={index}>
-            <strong>{msg.role}:</strong>  
-<MarkdownRenderer
-  content={msg.text}
-/>
-          </div>
-        ))}
+     <div className="flex-1 overflow-y-auto p-6">
+{chat.map((msg, index) => (
+  <div
+    key={index}
+    className={`flex mb-4 ${
+      msg.role === "user"
+        ? "justify-end"
+        : "justify-start"
+    }`}
+  >
+    <div
+      className={`max-w-3xl px-4 py-3 rounded-2xl shadow-sm ${
+        msg.role === "user"
+          ? "bg-blue-500 text-white"
+          : "bg-white border"
+      }`}
+    >
+      <MarkdownRenderer
+        content={msg.text}
+      />
+    </div>
+  </div>
+))}
 
         {loading && <p>Thinking...</p>}
       </div>
 
-      <div style={{ marginTop: 20 }}>
+    <div className="border-t bg-white p-4">
         <input
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Ask Anything..."
-          style={{ width: "80%", padding: 10 }}
+          className="w-full border rounded-xl px-4 py-3 outline-none"
         />
-        <button onClick={handleSend}>Send</button>
+       <button
+  disabled={loading}
+  onClick={handleSend}
+  className="mt-3 bg-black text-white px-5 py-2 rounded-xl disabled:opacity-50"
+>
+  {loading ? "Thinking..." : "Send"}
+</button>
       </div>
     </div>
   );
