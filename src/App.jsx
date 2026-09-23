@@ -14,29 +14,52 @@ function App() {
       text: message,
     };
 
+    // Current chat + new user message
+    const updatedChat = [...chat, userMessage];
 
-    setChat((prev) => [...prev, userMessage]);
+    // UI me user message show karo
+    setChat(updatedChat);
 
     setLoading(true);
 
-
     console.log(userMessage, "userMessage");
-    console.log(message , "message");
-    return; // Add this line to prevent the function from continuing
-    
-    const aiResponse = await sendMessage(message);
+    console.log(message, "message");
+    console.log(updatedChat, "updatedChat");
 
-    setChat((prev) => [
-      ...prev,
-      userMessage,
-      {
-        role: "assistant",
-        text: aiResponse,
-      },
-    ]);
+    try {
+      // Groq/OpenAI format
+      const messages = updatedChat.map((item) => ({
+        role: item.role,
+        content: item.text,
+      }));
 
-    setMessage("");
-    setLoading(false);
+      console.log(messages, "messages");
+
+      const aiResponse = await sendMessage(messages);
+
+      console.log(aiResponse, "aiResponse");
+
+      setChat([
+        ...updatedChat,
+        {
+          role: "assistant",
+          text: aiResponse,
+        },
+      ]);
+    } catch (error) {
+      console.error("Error:", error);
+
+      setChat([
+        ...updatedChat,
+        {
+          role: "assistant",
+          text: "Something went wrong.",
+        },
+      ]);
+    } finally {
+      setLoading(false);
+      setMessage("");
+    }
   };
 
   return (
@@ -67,7 +90,6 @@ function App() {
           placeholder="Ask Anything..."
           style={{ width: "80%", padding: 10 }}
         />
-
         <button onClick={handleSend}>Send</button>
       </div>
     </div>
