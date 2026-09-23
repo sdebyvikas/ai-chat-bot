@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { sendMessage } from "./services/groq";
+import MarkdownRenderer from "./components/common/MarkdownRenderer";
 
 function App() {
   const [message, setMessage] = useState("");
@@ -64,7 +65,7 @@ function App() {
 
   return (
     <div style={{ padding: 20 }}>
-      <h1>Groq Chat App</h1>
+      <h1>Chat App</h1>
 
       <div
         style={{
@@ -76,7 +77,10 @@ function App() {
       >
         {chat.map((msg, index) => (
           <div key={index}>
-            <strong>{msg.role}:</strong> {msg.text}
+            <strong>{msg.role}:</strong>  
+<MarkdownRenderer
+  content={msg.text}
+/>
           </div>
         ))}
 
